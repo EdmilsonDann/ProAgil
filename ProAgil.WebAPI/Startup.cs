@@ -30,6 +30,10 @@ namespace ProAgil.WebAPI
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDbContext<DataContext>(x=>x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+
+            //Nao esqueça de adicionar a permissao do cors para chamadas cruzadas entre os servidores
+            services.AddCors();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +50,11 @@ namespace ProAgil.WebAPI
             }
 
             //app.UseHttpsRedirection();
+
+            //Nao se esqueça tambem de adicionar antes da chamada o item abaixo UseMVC.. por que depois nao adianta mais que ele usou o mvc.. entao é fundamentel colcocar 
+            //ANTES DA CHAMADA O UseMVC()
+            //** entao falo para ele que permito qualquer origem, qualquer metodo e qualquer cabeçalho
+            app.UseCors(c=>c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseMvc();
         }
     }
