@@ -5,19 +5,19 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ProAgil.WebAPI.Data;
-using ProAgil.WebAPI.Model;
+using ProAgil.Repository;
+
 
 namespace ProAgil.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+   [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
         //propriedade readonly
-        public DataContext Context { get; }
+        public ProAgilContext Context { get; }
 
-        public ValuesController(DataContext context)
+        public ValuesController(ProAgilContext context)
         {
             this.Context = context;
 
@@ -52,7 +52,7 @@ namespace ProAgil.WebAPI.Controllers
             try
             {
                 //nao esqueça que essa é uma chamada que abre uma trade e é assincrono, temos que fazer ele esperar ir ao banco pegar tudo e retornoar.. por isso o await
-                  var result = await Context.Eventos.FirstOrDefaultAsync(e=>e.EventoId == id);
+                  var result = await Context.Eventos.FirstOrDefaultAsync(e=>e.Id == id);
                  return Ok(result);
             }
             catch (System.Exception)

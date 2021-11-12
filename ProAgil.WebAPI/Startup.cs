@@ -11,7 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using ProAgil.WebAPI.Data;
+using ProAgil.Repository;
+
 
 namespace ProAgil.WebAPI
 {
@@ -27,9 +28,15 @@ namespace ProAgil.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+             services.AddDbContext<ProAgilContext>(x=>x.UseSqlite(Configuration.GetConnectionString("DefaultConnection"))); 
+             
+             //Aqui estamo injetando por dependencia a minha classe de repositorio
+             //Toda vez que alguem chamar na controller o IProAgilRepository, estara utilizando a classe de repositorio pronta
+             //observe na controller, que não é mais chamado o ProAgilContext.. e sim direto o repositorio
+             services.AddScoped<IProAgilRepository, ProAgilRepository>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddDbContext<DataContext>(x=>x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+             
 
             //Nao esqueça de adicionar a permissao do cors para chamadas cruzadas entre os servidores
             services.AddCors();
@@ -55,6 +62,8 @@ namespace ProAgil.WebAPI
             //ANTES DA CHAMADA O UseMVC()
             //** entao falo para ele que permito qualquer origem, qualquer metodo e qualquer cabeçalho
             app.UseCors(c=>c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            //Com o item abaixo voce permite que o serviço disponibilize as imagens
+            app.UseStaticFiles();
             app.UseMvc();
         }
     }
