@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule} from '@angular/common/http';
-import { FormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { AppRoutingModule } from './app-routing.module';
@@ -21,6 +21,9 @@ import { EventoService } from './_services/Evento.service';
 //por exemplo usei o DateTimeFormatPipe.. que criei.. para ele ficar disponível dentro do projeto.. preciso
 //colocar ele nos declarations e ele irá fazer o imports automatico.. se nao fizer.. precisa ter importado sempre confira!!
 
+//Tambem usei o registerForm: FormGroup = new FormGroup({}); no eventos.component.ts, e tambem usei no eventos.html
+//para ser um form reativo .. nao posso esquecer de colocaqr aqui no imports.. o ReactiveFormsModule ai funcionara o formgroup
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,7 +40,8 @@ import { EventoService } from './_services/Evento.service';
     ModalModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     EventoService
